@@ -27,7 +27,7 @@ if command == "add":
   else:
     NewAddition={
       "note": "".join(sys.argv[2:]),
-      "status": "In Progress" #default status
+      "status": "in-progress" #default status
     }
    
     notesdemo.append(NewAddition)
@@ -87,7 +87,7 @@ elif command == "status":
     try:
       note_index= int(sys.argv[2]) - 1
       new_status = sys.argv[3].lower()
-      if new_status not in ["to do","in progress","completed"]:
+      if new_status not in ["to-do","in-progress","completed"]:
         print("invalid status: Select either to do, in progress, completed")
       else:
         notesdemo[note_index]["status"] = new_status

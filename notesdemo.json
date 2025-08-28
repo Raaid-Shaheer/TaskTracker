@@ -1,18 +1,18 @@
 [
     {
         "note": "Parrot",
-        "status": "In Progress"
+        "status": "to-do"
     },
     {
         "note": "Mango",
-        "status": "In Progress"
+        "status": "in-progress"
     },
     {
         "note": "Salmon",
-        "status": "In Progress"
+        "status": "completed"
     },
     {
         "note": "Penguin",
-        "status": "In Progress"
+        "status": "in-progress"
     }
 ]
