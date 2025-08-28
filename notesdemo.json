@@ -1,5 +1,18 @@
 [
-    "lion",
-    "Whale is in the ocean",
-    "Penguin"
+    {
+        "note": "Parrot",
+        "status": "In Progress"
+    },
+    {
+        "note": "Mango",
+        "status": "In Progress"
+    },
+    {
+        "note": "Salmon",
+        "status": "In Progress"
+    },
+    {
+        "note": "Penguin",
+        "status": "In Progress"
+    }
 ]

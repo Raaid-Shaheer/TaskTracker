@@ -25,11 +25,15 @@ if command == "add":
   if len(sys.argv) <3:
     print("Please add a note to add after the command")
   else:
-    NewAddition = "".join(sys.argv[2:])
+    NewAddition={
+      "note": "".join(sys.argv[2:]),
+      "status": "In Progress" #default status
+    }
+   
     notesdemo.append(NewAddition)
     with open(FILENAME,"w") as f:
       json.dump(notesdemo,f,indent=4)
-      print("Note Added Successfully:", NewAddition)
+      print("Note Added Successfully:", NewAddition["note"])
 
   # list all 
 elif command == "list":
@@ -37,7 +41,7 @@ elif command == "list":
       print("No notes available to list.")
     else:
       for i, listThis in enumerate(notesdemo,1):
-        print(f"{i}.{listThis}")
+        print(f"{i}.{listThis['note']} {listThis['status']}")
 
 # delete a note
 
@@ -63,15 +67,35 @@ elif command == "update":
     try:
       note_index = int(sys.argv[2]) - 1  # to make this 0-index
       new_note = " ".join(sys.argv[3:])  # to make the added note into a single string
-      old_note = notesdemo[note_index]
-    
-      notesdemo[note_index] = new_note
+      old_note = notesdemo[note_index]["note"]
+
+      notesdemo[note_index] = {
+        "note": new_note,
+        "status": notesdemo[note_index]["status"]
+      }
       with open(FILENAME, "w") as f:
         json.dump(notesdemo, f, indent=4)
         print(f"Updated Note {note_index + 1}: {notesdemo[note_index]}") # note_index+1 makes it human readable instead of 0 index
         print(f"Old Note: {old_note}")
     except (ValueError, IndexError):
       print("Invalid Note Number")
-
+# change status
+elif command == "status":
+  if len(sys.argv) < 4:
+    print("format: python notesdemo.py status note_number new_status")
+  else:
+    try:
+      note_index= int(sys.argv[2]) - 1
+      new_status = sys.argv[3].lower()
+      if new_status not in ["to do","in progress","completed"]:
+        print("invalid status: Select either to do, in progress, completed")
+      else:
+        notesdemo[note_index]["status"] = new_status
+        with open(FILENAME,"w") as f:
+          json.dump(notesdemo,f,indent=4)
+          print(f"Updated Status of {note_index + 1} is  {new_status}")
+    
+    except (ValueError,IndexError):
+      print("Invalid Note Number")
 else:
   print("Invalid Command: Use either add,list, delete,update please!")
