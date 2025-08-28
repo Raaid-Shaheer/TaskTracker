@@ -1,6 +1,4 @@
-https://roadmap.sh/projects/task-tracker
-
-Task Tracker CLI
+TaskTracker  https://roadmap.sh/projects/task-tracker
 
 A simple Command-Line Interface (CLI) tool to track tasks, manage their statuses, and store them in a JSON file.
 
