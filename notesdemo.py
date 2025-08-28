@@ -5,10 +5,15 @@ from datetime import datetime
 FILENAME = "notesdemo.json"
 
 # Load notes
+# Load notes
 try:
     with open(FILENAME, "r") as f:
-        notesdemo = json.load(f)
+        content = f.read().strip()
+        notesdemo = json.loads(content) if content else []
 except FileNotFoundError:
+    notesdemo = []
+except json.JSONDecodeError:
+    print(f"Error: {FILENAME} contains invalid JSON. Starting with an empty list.")
     notesdemo = []
 
 # Check if command is given
@@ -51,6 +56,8 @@ elif command == "list":
             tasks_to_display = [t for t in notesdemo if t.get('status') == "in-progress"]
         elif subcommand == "done":
             tasks_to_display = [t for t in notesdemo if t.get('status') == "done"]
+        elif subcommand == "not-done":
+            tasks_to_display = [t for t in notesdemo if t.get('status') != "done"]
         else:
             print("Invalid subcommand: Use either todo, in-progress, done")
             sys.exit(1)
@@ -70,10 +77,14 @@ elif command == "delete":
         print("Please provide the task number to delete or 'all' after the 'delete' command to delete all tasks.")
         sys.exit(1)
     if sys.argv[2].lower() == "all":
-        notesdemo.clear()
-        with open(FILENAME, "w") as f:
-            json.dump(notesdemo, f, indent=4)
-        print("Deleted All Tasks")
+        confirm = input("Are you sure you want to delete ALL tasks? (yes/no): ").strip().lower()  
+        if confirm == "yes":
+            notesdemo.clear()
+            with open(FILENAME, "w") as f:
+                json.dump(notesdemo, f, indent=4)
+            print("Deleted All Tasks")
+        else:
+            print("Operation cancelled.")
         sys.exit(0)
     try:
         task_index = int(sys.argv[2]) - 1
@@ -87,20 +98,32 @@ elif command == "delete":
 # ---------- UPDATE ----------
 elif command == "update":
     if len(sys.argv) < 4:
-        print("Format: python notesdemo.py update task_number updated_description")
+        print("Format: python notesdemo.py update task_number new_title [new_description...]")
         sys.exit(1)
     try:
         task_index = int(sys.argv[2]) - 1
-        new_description = " ".join(sys.argv[3:])
-        old_description = notesdemo[task_index].get('description', notesdemo[task_index].get('note',''))
+        new_title = sys.argv[3]
+        new_description = " ".join(sys.argv[4:]) if len(sys.argv) > 4 else notesdemo[task_index].get('description','')
+        
+        old_title = notesdemo[task_index].get('title','Untitled')
+        old_description = notesdemo[task_index].get('description','')
+        
+        # Update title and description
+        notesdemo[task_index]['title'] = new_title  
         notesdemo[task_index]['description'] = new_description
         notesdemo[task_index]['updated_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Save changes
         with open(FILENAME, "w") as f:
             json.dump(notesdemo, f, indent=4)
-        print(f"Updated Task {task_index + 1}: {notesdemo[task_index].get('title','Untitled')}")
-        print(f"Old Description: {old_description}")
+        
+        print(f"Updated Task {task_index + 1}: {new_title}")
+        print(f"Old Title: {old_title} | Old Description: {old_description}")
+        
     except (ValueError, IndexError):
         print("Invalid Task Number")
+
+        
 
 # ---------- STATUS ----------
 elif command == "status":
