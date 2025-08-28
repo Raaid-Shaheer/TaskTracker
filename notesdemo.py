@@ -35,12 +35,26 @@ if command == "add":
       json.dump(notesdemo,f,indent=4)
       print("Note Added Successfully:", NewAddition["note"])
 
-  # list all 
+  # list 
 elif command == "list":
+    # default show all items in the list
+    if len(sys.argv)==2:
+      notes_displayed= notesdemo
+    else:
+      subcommand = sys.argv[2].lower()
+      if subcommand=="to-do":
+        notes_displayed = [note for note in notesdemo if note['status']=="to-do"]
+      elif subcommand=="in-progress":
+        notes_displayed = [note for note in notesdemo if note['status']=="in-progress"]
+      elif subcommand=="completed":
+        notes_displayed = [note for note in notesdemo if note['status']=="completed"]
+      else:
+        print("Invalid subcommand: Use either to-do, in-progress, completed")
+        sys.exit(1)
     if not notesdemo:
       print("No notes available to list.")
     else:
-      for i, listThis in enumerate(notesdemo,1):
+      for i, listThis in enumerate(notes_displayed,1):
         print(f"{i}.{listThis['note']} {listThis['status']}")
 
 # delete a note
