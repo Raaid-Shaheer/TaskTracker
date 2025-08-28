@@ -1,18 +1,1 @@
-[
-    {
-        "note": "Parrot",
-        "status": "to-do"
-    },
-    {
-        "note": "Mango",
-        "status": "in-progress"
-    },
-    {
-        "note": "Salmon",
-        "status": "completed"
-    },
-    {
-        "note": "Penguin",
-        "status": "in-progress"
-    }
-]
+[]
